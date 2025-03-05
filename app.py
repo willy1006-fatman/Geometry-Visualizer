@@ -10,7 +10,7 @@ CORS(app)
 
 @app.route('/')
 def index():
-    return render_template('front_webpage_simple.html')  # Ensure templates/index.html exists
+    return render_template('TEMPLATE.hmtl')  # Ensure templates/index.html exists
 
 @app.route('/api/generate_commands', methods=['POST'])
 def api_generate_commands():
