@@ -1,6 +1,7 @@
 # Geometry-Visualizer
 ## Description
-YTP project by 這什麼CSES樹
+YTP project by 這什麼CSES樹.
+
 An application designed to visualize geometric diagrams from text input with 80% accuracy for high school-level problems. Built using RAG, a custom knowledge base, and a unique combination of LLMs we developed. It uses GeoGebra to generate diagrams from scripts and Gemini to generate scripts from prompts.
 
 ## Install and Run
