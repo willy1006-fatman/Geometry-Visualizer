@@ -1,0 +1,9 @@
+numpy
+pandas
+openpyxl
+flask
+flask-cors
+sentence-transformers
+faiss-cpu
+openai
+google-generativeai

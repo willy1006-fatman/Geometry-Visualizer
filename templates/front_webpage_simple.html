@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" style="color-scheme: dark;">
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <!-- Title -->
+    <title>Geometry Description Visualizer</title>
+    <!-- Font -->
+    <!-- Fonts : Inconsolata -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <!-- Fonts : Raleway -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!--  Fonts : Alumni Sans Pinstripe-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&display=swap" rel="stylesheet">
+    <!-- GeoGebra API -->
+    <script src="https://cdn.geogebra.org/apps/deployggb.js"></script>
+    
+    <style>
+        body {
+            font-family: "Alumni Sans Pinstripe";
+            margin: 4dvh 4dvw;
+            background-color: #98DFEA;
+            color: #4062BB;
+        }
+        #main{
+            display: flex;
+            width: 90dvw;
+            height: 70dvh;
+        }
+        #ggb-container{
+            display: inline-block;
+            width: 52dvw;
+            height: 80dvh;
+            margin-right: 1dvw;
+            float:left;
+            border: 2px solid #4062BB;
+            border-radius: 7px;
+        }
+        #user-interface{
+            display: inline-block;
+        }
+        #user-input {
+            display: inline-block;
+            width: 42dvw;
+            height: 60dvh;
+            margin-left: 3dvw;
+            float:left;
+            font-size: 2dvw;
+            font-family: "Raleway";
+            padding: .5em;
+            border: 3px solid #4062BB;
+            border-radius: 0.5dvw;
+            background-color: #2B303A;
+            color: #EFD9CE;
+            margin-bottom: 1.5dvh;
+        }
+        #user-buttons{
+            margin-left: 3dvw;
+        }
+        #generate-button {
+            text-align: center;
+            padding: 4dvh 20dvw;
+            font-size: 5dvh;
+            cursor: pointer;
+            background-color: #4062BB;
+            font-family: "Raleway";
+            color: #FBF5F3;
+            border: none;
+            border-radius: 0.5dvw;
+        }
+        #generate-button:hover {
+            background-color: #2B303A;
+        }
+        progress {
+            width: 44dvw;
+            height: 15dvh;
+            border-radius: 0.5dvw;
+            border: 3px solid #4062BB;
+            appearance: none;
+        }
+        progress::-webkit-progress-bar {
+            background-color: #EFD9CE;
+        }
+        progress::-webkit-progress-value {
+            background-color: #4062BB;
+        }
+
+        h1 {
+            font-size: 6dvh;
+            text-align: center;
+        }
+        /* Style for the Info Button */
+        .info-button {
+            position: fixed;
+            top: 4dvh;
+            left: 4dvw;
+            background-color: #E2856E;
+            color: #EFD9CE;
+            border: none;
+            padding: 2dvh 3dvw;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 2dvw;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 4dvh;
+            height: 4dvw;
+            font-family: "Raleway";
+        }
+
+        .info-button:hover {
+            background-color: #52489C;
+        }
+
+        /* Style for the Info Card */
+        .info-card {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 12dvh; /* Positioned below the button */
+            left: 4dvw; /* Align with the button */
+            font-family: "Raleway";
+            font-size: 1.5dvw;
+            width: 40dvw;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            z-index: 999;
+        }
+
+        /* Close Button inside Info Card */
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close-button:hover {
+            color: #000;
+        }
+
+        /* Optional: Smooth fade-in and fade-out for Info Card */
+        .info-card.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .info-card.hide {
+            animation: fadeOut 0.3s;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .info-card {
+                width: 90%;
+                left: 5%;
+                top: 70px;
+            }
+
+            .info-button {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1><b><i>Geometry Description Visualizer</i></b></h1>
+    <!-- Info Button -->
+    <button id="infoButton" class="info-button" aria-label="Information">
+        Info
+    </button>
+    <div id="main">
+        <!-- GeoGebra Embed -->
+        <div id="ggb-container"></div>
+        <div id="user-interface">
+            <!-- User Input -->
+            <textarea id="user-input" placeholder="Enter your geometric description here..."></textarea>
+            <!-- Buttons and Progress Bar -->
+            <div id="user-buttons">
+                <button id="generate-button">Go!</button>
+                <div id="progress-container" style="display: none; width: 100%;">
+                    <progress id="progress-bar" value="0" max="100"></progress>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Info Card -->
+    <div id="infoCard" class="info-card" role="dialog">
+        <span id="closeInfo" class="close-button">&times;</span>
+        <h2>
+            Welcome to the Geometry Description Visualizer!
+        </h2>
+        <p>
+            Powered by GeoGebra and ChatGPT, this tool allows you to visualize geometry diagrams based on your descriptions. <br> 
+            Simply enter your description in the input textbox on the left (for example: "Given triangle ABC, draw the internal angle bisector of angle BAC, which intersects line BC at point D") and click the "Go!" button below. <br>
+            Your diagram will then appear on the canvas to the left. 
+        </p>
+    </div>
+    <script>
+        // Initialize GeoGebra App
+        var params = {
+            "id": "ggbApplet",
+            "showToolBar": false,
+            "showAlgebraInput": false,
+            "showMenuBar": false,
+            borderRadius: 5,
+            borderColor: "#562C2C",
+            scaleContainerClass: "ggb-container",
+            editorBackgroundColor: "#FBF5F3",
+            editorForegroundColor: "#2B303A",
+            perspective: "2",
+        };
+
+        var applet = new GGBApplet(params, true);
+        window.addEventListener("load", function() {
+            applet.inject('ggb-container');
+            // Check whether the app is initialized
+            applet.registerAddListener(function(api) {
+                window.ggbApplet = api;
+            });
+        });
+
+        // Handle User Input and Communication with Backend
+        document.getElementById('generate-button').addEventListener('click', function() {
+            var userInput = document.getElementById('user-input').value.trim();
+            if (userInput.length === 0) {
+                alert('Please enter a geometric description.');
+                return;
+            }
+
+            // Reset progress bar
+            var progressBar = document.getElementById('progress-bar');
+            progressBar.value = 0;
+
+            // Hide the button and show the progress bar
+            document.getElementById('generate-button').style.display = 'none';
+            document.getElementById('progress-container').style.display = 'block';
+
+            // Simulate the progress bar as the operation proceeds
+            var progressInterval = setInterval(function() {
+                if (progressBar.value < 90) {
+                    progressBar.value += Math.random() * 0.1; // Randomly increase progress
+                }
+            }, 20);
+
+            // Call the backend API
+            fetch('/api/generate_commands', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: userInput })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text) });
+                }
+                return response.text(); // Get response
+            })
+            .then(commands => {
+                // Ensure that the GeoGebra API is initialized
+                if (typeof ggbApplet !== 'undefined') {
+                    // Reset the GeoGebra applet
+                    ggbApplet.reset();
+
+                    // Split commands by new lines
+                    var commandLines = commands.trim().split('\n');
+                    try {
+                        commandLines.forEach(function(cmd) {
+                            console.log(cmd);
+                            ggbApplet.evalCommand(cmd.trim());
+                        });
+                    } catch (error) {
+                        alert('Error executing commands: ' + error.message);
+                    }
+                } else {
+                    alert('GeoGebra Applet isn\'t initialized');
+                }
+            })
+            .catch(error => {
+                console.error('Error communicating with server:', error);
+                alert('An error occurred while generating commands: ' + error.message);
+            })
+            .finally(() => {
+                // Complete the progress bar
+                progressBar.value = 100;
+                clearInterval(progressInterval);
+                // Delay hiding the progress bar to show completion
+                setTimeout(function() {
+                    document.getElementById('progress-container').style.display = 'none';
+                    document.getElementById('generate-button').style.display = 'block';
+                }, 500);
+            });
+        });
+        // Get elements
+        const infoButton = document.getElementById('infoButton');
+        const infoCard = document.getElementById('infoCard');
+        const closeInfo = document.getElementById('closeInfo');
+
+        // Function to show the info card
+        function showInfoCard() {
+            infoCard.classList.add('show');
+            infoCard.classList.remove('hide');
+        }
+
+        // Function to hide the info card
+        function hideInfoCard() {
+            infoCard.classList.add('hide');
+            infoCard.classList.remove('show');
+        }
+
+        // Toggle function
+        function toggleInfoCard() {
+            if (infoCard.classList.contains('show')) {
+                hideInfoCard();
+            } else {
+                showInfoCard();
+            }
+        }
+
+        // Event listeners
+        infoButton.addEventListener('click', toggleInfoCard);
+        closeInfo.addEventListener('click', hideInfoCard);
+
+        // Optional: Click outside the info card to close it
+        window.addEventListener('click', function(event) {
+            if (event.target === infoCard) {
+                hideInfoCard();
+            }
+        });
+
+        // Optional: Close the info card when pressing the Escape key
+        window.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && infoCard.classList.contains('show')) {
+                hideInfoCard();
+            } 
+        });
+    </script>
+</body>
+</html>
