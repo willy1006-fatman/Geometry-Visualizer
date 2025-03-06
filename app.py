@@ -3,7 +3,7 @@ from flask_cors import CORS
 import webbrowser
 import threading
 import os
-from RAG.GV_pseudo_code_validation_gemini import generate_response
+from RAG.GV_RAG_pseudo_code_validation_gemini import generate_response
 
 app = Flask(__name__)
 CORS(app)
